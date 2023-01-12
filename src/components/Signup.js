@@ -1,21 +1,30 @@
 import React, { useState, useContext } from "react";
 import axios from "axios";
 import Modal from "react-bootstrap/Modal";
-import { ModalBody } from "react-bootstrap";
+import { ModalBody,Form, InputGroup } from "react-bootstrap";
 import SomeContext from "../Context";
 import { Button } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 function Signup() {
-  const { show, onModalSubmit,handleClose,email,
+  const {
+    show,
+    onModalSubmit,
+    handleClose,
+    email,
     setEmail,
     password,
     setPassword,
     phoneNumber,
     setPhoneNumber,
-    firstName,setFirstName,
-    lastName,setLastName, 
-    setCurrentUser,authenticated,setAuthenticated} = useContext(SomeContext);
-    const navigate = useNavigate()
+    firstName,
+    setFirstName,
+    lastName,
+    setLastName,
+    setCurrentUser,
+    currentUser,
+    setAuthenticated,
+  } = useContext(SomeContext);
+  const navigate = useNavigate();
 
   // const [signedUpUser,setSignedUpUser]=useState(false)
   const handleEmail = (e) => {
@@ -35,12 +44,10 @@ function Signup() {
   };
   const handleSignUp = async (e) => {
     try {
-      e.stopPropagation();
-      handleClose();
       const signedUp = {
         email,
         password,
-        repassword:password,
+        repassword: password,
         firstName,
         lastName,
         phoneNumber,
@@ -50,14 +57,31 @@ function Signup() {
         signedUp
       );
       if(res.data.token) {
+        e.stopPropagation();
+        handleClose();
         setAuthenticated(true)
-        setCurrentUser(res.data.user)
-        localStorage.setItem('token', res.data.token)
+        setCurrentUser(res.data.newUser)
+        
+        localStorage.setItem('token', res.data.token);
+        localStorage.setItem('currentUser',JSON.stringify(res.data.newUser))
+        
         navigate('/')
       }
+      // localStorage.setItem('currentUser',JSON.stringify(res.data.newUser))
+      navigate("/");
+      e.stopPropagation();
+      setAuthenticated(true);
+      //  setCurrentUser(res.data);
+      handleClose();
       console.log(res.data);
+      console.log(res.data.token);
+      console.log(currentUser)
+      
     } catch (error) {
+      setAuthenticated(false);
       console.log(error);
+      console.log(error.response.data);
+      alert(error.response.data);
     }
   };
   return (
@@ -71,65 +95,144 @@ function Signup() {
           onHide={onModalSubmit}
         >
           <ModalBody className="signUpModalContent">
-          <button
-            type="button"
-            className="close"
-            data-dismiss="modal"
-            aria-label="Close"
-            onClick={onModalSubmit}
-          ></button>
+            <button
+              type="button"
+              className="close"
+              data-dismiss="modal"
+              aria-label="Close"
+              onClick={onModalSubmit}
+            ></button>
             <form>
-              <div className="SignUp">
-               Email:
+              {/* <div className="SignUp">
+                Email:
                 <input
                   type="text"
                   className="Email"
                   onChange={handleEmail}
                 ></input>
-              </div>
-              <div className="SignUp">
+              </div> */}
+              <InputGroup className="mb-3">
+                <InputGroup.Text id="basic-addon1">Email:</InputGroup.Text>
+                <Form.Control
+                  placeholder="Email"
+                  aria-label="Email"
+                  aria-describedby="basic-addon1"
+                  onChange={handleEmail}
+                  name="email"
+                  type="email"
+                />
+              </InputGroup>
+              {/* <div className="SignUp">
                 Password:
                 <input
-                  type="password" name="password"
+                  type="password"
+                  name="password"
                   onChange={handlePassword}
                 ></input>
-              </div>
-              <div>
+              </div> */}
+              <InputGroup className="mb-3">
+                <InputGroup.Text id="basic-addon1">Password:</InputGroup.Text>
+                <Form.Control
+                  placeholder="Password"
+                  aria-label="Password"
+                  aria-describedby="basic-addon1"
+                  onChange={handlePassword}
+                  name="password"
+                  type="password"
+                />
+              </InputGroup>
+              {/* <div>
                 Confirm Password:
                 <input
-                  type="password" className="password"
+                  type="password"
+                  className="password"
                   onChange={handlePassword}
                 ></input>
-              </div>
-              <div>
+              </div> */}
+              <InputGroup className="mb-3">
+                <InputGroup.Text id="basic-addon1">Confirm Password:</InputGroup.Text>
+                <Form.Control
+                  placeholder="Confirm Password"
+                  aria-label="Password"
+                  aria-describedby="basic-addon1"
+                  onChange={handlePassword}
+                  name="repassword"
+                  type="password"
+                />
+              </InputGroup>
+              {/* <div>
                 First Name:
                 <input
                   type="text"
                   className="firstName"
                   onChange={handleFirstName}
                 ></input>
-              </div>
-              <div>
+              </div> */}
+              <InputGroup className="mb-3">
+                <InputGroup.Text id="basic-addon1">First Name:</InputGroup.Text>
+                <Form.Control
+                  placeholder="First Name"
+                  aria-label="firstName"
+                  aria-describedby="basic-addon1"
+                  onChange={handleFirstName}
+                  name="firstName"
+                  type="text"
+                />
+              </InputGroup>
+              {/* <div>
                 Last Name:
                 <input
                   type="text"
                   className="lastName"
                   onChange={handleLastName}
                 ></input>
-              </div>
-              <div>
+              </div> */}
+              <InputGroup className="mb-3">
+                <InputGroup.Text id="basic-addon1">Last Name:</InputGroup.Text>
+                <Form.Control
+                  placeholder="Last Name"
+                  aria-label="lastName"
+                  aria-describedby="basic-addon1"
+                  onChange={handleLastName}
+                  name="lastName"
+                  type="text"
+                />
+              </InputGroup>
+              {/* <div>
                 Phone Number:
                 <input
                   type="tel"
                   className="phone"
                   onChange={handlePhoneNumber}
                 ></input>
-              </div>
-            </form>
-            
-            <Button onClick={handleSignUp} className='signUpButton'type="submit">
+              </div> */}
+              <InputGroup className="mb-3">
+                <InputGroup.Text id="basic-addon1">Phone Number:</InputGroup.Text>
+                <Form.Control
+                  placeholder="Phone Number"
+                  aria-label="phoneNumber"
+                  aria-describedby="basic-addon1"
+                  onChange={handlePhoneNumber}
+                  name="phoneNumber"
+                  type="tel"
+                />
+                </InputGroup>
+              <Button
+              onClick={handleSignUp}
+              className="signUpButton"
+              type="submit"
+            >
               Sign Up
             </Button>
+            </form>
+
+            {/* <Button
+              onClick={handleSignUp}
+              className="signUpButton"
+              type="submit"
+            >
+              Sign Up
+            </Button> */}
           </ModalBody>
         </Modal>
       </form>

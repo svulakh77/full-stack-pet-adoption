@@ -14,6 +14,7 @@ function NavBarIn() {
     <div>
       <nav>
         <div className="nav">
+          <Link className="link" to={'/'}>Home</Link>
           <Link className="link" to={"/search"}>
             Search
           </Link>
@@ -21,6 +22,8 @@ function NavBarIn() {
             Profile
           </Link>
           <Link className="link" to={"/myPets"}>My Pets</Link>
+          <Link className="link" to={"/addPet"}>Add Pets</Link>
+          
           <Link className="link" to={"/"} onClick={handleLogout}>Logout</Link>
         </div>
       </nav>

@@ -2,7 +2,7 @@ import React, { useState, useContext } from "react";
 import axios from "axios";
 import SomeContext from "../Context";
 import { Modal } from "react-bootstrap";
-import { ModalBody } from "react-bootstrap";
+import { Form, InputGroup, ModalBody } from "react-bootstrap";
 import { Button } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 function Login() {
@@ -19,8 +19,6 @@ function Login() {
   };
   const handleLogin = async (e) => {
     try {
-      e.stopPropagation();
-      handleClose();
       const loggedIn = {
         email,
         password,
@@ -32,16 +30,24 @@ function Login() {
       );
     
       if(res.data.token) {
+        e.stopPropagation();
+        handleClose();
         setAuthenticated(true)
         setCurrentUser(res.data.user)
-        localStorage.setItem('token', res.data.token)
+        
+        localStorage.setItem('token', res.data.token);
+        localStorage.setItem('currentUser',JSON.stringify(res.data.user))
+        
         navigate('/')
       }
+      
       console.log(res.data.user.firstName);
       console.log(res.data.token);
       console.log(currentUser);
     } catch (error) {
-      console.log(error);
+      console.log(error)
+      console.log(error.response.data)
+      alert(error.response.data)
     }
   };
 
@@ -63,14 +69,34 @@ function Login() {
             aria-label="Close"
             onClick={onModalSubmit}
           ></button>
-          Email:
-            <input type="text" className="email" onChange={handleEmail}></input>
-            Password:
+            <InputGroup className="mb-3">
+                <InputGroup.Text id="basic-addon1">Email:</InputGroup.Text>
+                <Form.Control
+                  placeholder="Email"
+                  aria-label="Email"
+                  aria-describedby="basic-addon1"
+                  onChange={handleEmail}
+                  name="email"
+                  type="email"
+                />
+              </InputGroup>
+            {/* Password:
             <input
               type="password"
               className="password"
               onChange={handlePassword}
-            ></input>
+            ></input> */}
+            <InputGroup className="mb-3">
+                <InputGroup.Text id="basic-addon1">Confirm Password:</InputGroup.Text>
+                <Form.Control
+                  placeholder="Confirm Password"
+                  aria-label="Password"
+                  aria-describedby="basic-addon1"
+                  onChange={handlePassword}
+                  name="repassword"
+                  type="password"
+                />
+              </InputGroup>
              <Button onClick={handleLogin} className='signUpButton'type="submit">
               Log In
             </Button>

@@ -1,84 +1,158 @@
 import React, { useState, useContext } from "react";
+import axios from "axios";
 import SomeContext from "../Context";
+import { Form, InputGroup } from "react-bootstrap";
 
 function Profile() {
   const {
     email,
     password,
-    setPassword,
     phoneNumber,
-    setPhoneNumber,
     firstName,
-    setFirstName,
     lastName,
-    setLastName,
+    handleClose,
+    setCurrentUser,
   } = useContext(SomeContext);
   const [newEmail, setNewEmail] = useState(email);
   const [newPassword, setNewPassword] = useState(password);
   const [newFirstName, setNewFirstName] = useState(firstName);
   const [newLastName, setNewLastName] = useState(lastName);
   const [newPhoneNumber, setNewPhoneNumber] = useState(phoneNumber);
-  const[bio,setBio]=useState("")
+  const [bio, setBio] = useState("");
   const handleNewEmail = (e) => {
     setNewEmail(e.target.value);
   };
-  const handlePassword = (e) => {
+  const handleNewPassword = (e) => {
     setNewPassword(e.target.value);
   };
-  const handleFirstName = (e) => {
+  const handleNewFirstName = (e) => {
     setNewFirstName(e.target.value);
   };
-  const handleLastName = (e) => {
+  const handleNewLastName = (e) => {
     setNewLastName(e.target.value);
   };
-  const handlePhoneNumber = (e) => {
+  const handleNewPhoneNumber = (e) => {
     setNewPhoneNumber(e.target.value);
   };
   const handleBio = (e) => {
     setBio(e.target.value);
   };
-  
+  const handleProfile = async (e) => {
+    try {
+      console.log("Updating user");
+      e.stopPropagation();
+      handleClose();
+      const newProfile = {
+        email: newEmail,
+        password: newPassword,
+        firstName: newFirstName,
+        lastName: newLastName,
+        phoneNumber: newPhoneNumber,
+        bio,
+      };
+      console.log(newProfile);
+      const token = localStorage.getItem("token");
+      const res = await axios.put(
+        "http://localhost:8080/users/profile",
+        newProfile,
+        { headers: { authorization: `Bearer ${token}` } }
+      );
+      localStorage.getItem("token", res.data.token);
+      console.log(res.data);
+      setCurrentUser(newProfile);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <div className="profileForm">
-      <form>
-        <div>
-          <p className='profileText'>
-          Update Email:
-          </p>
-          <input type="text" className="profileInput"></input>
+      <div className="addPetContainer">
+        <div className="addPet">
+          <InputGroup className="mb-3">
+            <InputGroup.Text id="basic-addon1">Update Email:</InputGroup.Text>
+            <Form.Control
+              placeholder="Email"
+              aria-label="Email"
+              aria-describedby="basic-addon1"
+              onChange={handleNewEmail}
+              name="email"
+              type="email"
+            />
+          </InputGroup>
+
+          <InputGroup className="mb-3">
+            <InputGroup.Text id="basic-addon1">
+              Update Password:
+            </InputGroup.Text>
+            <Form.Control
+              placeholder="Password"
+              aria-label="Password"
+              aria-describedby="basic-addon1"
+              onChange={handleNewPassword}
+              name="password"
+              type="password"
+            />
+          </InputGroup>
+
+          <InputGroup className="mb-3">
+            <InputGroup.Text id="basic-addon1">
+              Update First Name:
+            </InputGroup.Text>
+            <Form.Control
+              placeholder="First Name"
+              aria-label="First Name"
+              aria-describedby="basic-addon1"
+              onChange={handleNewFirstName}
+              name="firstName"
+              type="text"
+            />
+          </InputGroup>
+
+          <InputGroup className="mb-3">
+            <InputGroup.Text id="basic-addon1">
+              Update Last Name:
+            </InputGroup.Text>
+            <Form.Control
+              placeholder="Last Name"
+              aria-label="Last Name"
+              aria-describedby="basic-addon1"
+              onChange={handleNewLastName}
+              name="lastName"
+              type="text"
+            />
+          </InputGroup>
+
+          <InputGroup className="mb-3">
+            <InputGroup.Text id="basic-addon1">
+              Update Phone Number:
+            </InputGroup.Text>
+            <Form.Control
+              placeholder="Phone Number"
+              aria-label="Phone Number"
+              aria-describedby="basic-addon1"
+              onChange={handleNewPhoneNumber}
+              name="phoneNumber"
+              type="tel"
+            />
+          </InputGroup>
+
+          <InputGroup className="mb-3">
+            <InputGroup.Text id="basic-addon1">Add a Bio:</InputGroup.Text>
+            <Form.Control
+              placeholder="Bio"
+              aria-label="Bio"
+              aria-describedby="basic-addon1"
+              onChange={handleBio}
+              name="bio"
+              as="textarea"
+            />
+          </InputGroup>
+          <button className="profileButton" onClick={handleProfile}>
+            Save Changes
+          </button>
         </div>
-        <div>
-          <p className='profileText'>
-          Update Password:
-          </p>
-          <input type="password" className="profileInput"></input>
-        </div>
-        <div>
-        <p className='profileText'>
-          Update First Name:
-          </p>
-          <input type="text" className="profileInput"></input>
-        </div>
-        <div>
-        <p className='profileText'>
-          Update Last Name:
-          </p>
-          <input type="text" className="profileInput"></input>
-        </div>
-        <div>
-        <p className='profileText'>
-          Update Phone Number:
-          </p>
-          <input type="tel" className="profileInput"></input>
-        </div>
-        <div>
-        <p className='profileText'>
-          Add Bio:
-          </p>
-          <input type="text" className="profileInput bio"></input>
-        </div>
-        <button className="profileButton">Save Changes</button>
-      </form>
+      </div>
     </div>
   );
 }
