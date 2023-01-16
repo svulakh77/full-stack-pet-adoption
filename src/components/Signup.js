@@ -103,14 +103,6 @@ function Signup() {
               onClick={onModalSubmit}
             ></button>
             <form>
-              {/* <div className="SignUp">
-                Email:
-                <input
-                  type="text"
-                  className="Email"
-                  onChange={handleEmail}
-                ></input>
-              </div> */}
               <InputGroup className="mb-3">
                 <InputGroup.Text id="basic-addon1">Email:</InputGroup.Text>
                 <Form.Control
@@ -122,14 +114,6 @@ function Signup() {
                   type="email"
                 />
               </InputGroup>
-              {/* <div className="SignUp">
-                Password:
-                <input
-                  type="password"
-                  name="password"
-                  onChange={handlePassword}
-                ></input>
-              </div> */}
               <InputGroup className="mb-3">
                 <InputGroup.Text id="basic-addon1">Password:</InputGroup.Text>
                 <Form.Control
@@ -141,14 +125,6 @@ function Signup() {
                   type="password"
                 />
               </InputGroup>
-              {/* <div>
-                Confirm Password:
-                <input
-                  type="password"
-                  className="password"
-                  onChange={handlePassword}
-                ></input>
-              </div> */}
               <InputGroup className="mb-3">
                 <InputGroup.Text id="basic-addon1">Confirm Password:</InputGroup.Text>
                 <Form.Control
@@ -160,14 +136,6 @@ function Signup() {
                   type="password"
                 />
               </InputGroup>
-              {/* <div>
-                First Name:
-                <input
-                  type="text"
-                  className="firstName"
-                  onChange={handleFirstName}
-                ></input>
-              </div> */}
               <InputGroup className="mb-3">
                 <InputGroup.Text id="basic-addon1">First Name:</InputGroup.Text>
                 <Form.Control
@@ -179,14 +147,6 @@ function Signup() {
                   type="text"
                 />
               </InputGroup>
-              {/* <div>
-                Last Name:
-                <input
-                  type="text"
-                  className="lastName"
-                  onChange={handleLastName}
-                ></input>
-              </div> */}
               <InputGroup className="mb-3">
                 <InputGroup.Text id="basic-addon1">Last Name:</InputGroup.Text>
                 <Form.Control
@@ -198,14 +158,6 @@ function Signup() {
                   type="text"
                 />
               </InputGroup>
-              {/* <div>
-                Phone Number:
-                <input
-                  type="tel"
-                  className="phone"
-                  onChange={handlePhoneNumber}
-                ></input>
-              </div> */}
               <InputGroup className="mb-3">
                 <InputGroup.Text id="basic-addon1">Phone Number:</InputGroup.Text>
                 <Form.Control
@@ -226,13 +178,6 @@ function Signup() {
             </Button>
             </form>
 
-            {/* <Button
-              onClick={handleSignUp}
-              className="signUpButton"
-              type="submit"
-            >
-              Sign Up
-            </Button> */}
           </ModalBody>
         </Modal>
       </form>

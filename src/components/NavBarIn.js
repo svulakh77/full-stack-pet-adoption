@@ -23,7 +23,7 @@ function NavBarIn() {
           </Link>
           <Link className="link" to={"/myPets"}>My Pets</Link>
           <Link className="link" to={"/addPet"}>Add Pets</Link>
-          
+          <Link className="link" to={"/editPet"}>Edit Pet</Link>
           <Link className="link" to={"/"} onClick={handleLogout}>Logout</Link>
         </div>
       </nav>

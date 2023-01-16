@@ -23,53 +23,33 @@ function AddPets() {
     setDietaryRestrictions,
     breed,
     setBreed,
+    addPet
   } = useContext(SomeContext);
-  const[color,setColor]=useState("")
-
-  const handleType = (e) => {
-    setType(e.target.value);
-  };
-  const handlePetName = (e) => {
-    setPetName(e.target.value);
-  };
-  const handlePic = (e) => {
-    setPic(e.target.value);
-  };
-  const handleHeight = (e) => {
-    setHeight(e.target.value);
-  };
-  const handleWeight = (e) => {
-    setWeight(e.target.value);
-  };
-  const handleColor = (e)=>{
-    setColor(e.target.value)
-  };
-  const handlePetBio = (e) => {
-    setPetBio(e.target.value);
-  };
-  const handleDietaryRestrictions = (e) => {
-    setDietaryRestrictions(e.target.value);
-  };
-  const handleBreed = (e) => {
-    setBreed(e.target.value);
-  };
+  // const[color,setColor]=useState("")
+  const [petInfo, setPetInfo]=useState({type:'',petName:'', height:0,weight:0,color:'',petBio:'',hypoallergenic:0,dietaryRestrictions:'',breed:''})
+const handlePetInfo = (e)=>{
+  setPetInfo({...petInfo,[e.target.id]:e.target.value});
+}
+const handlePic = (e) => {
+  setPic(e.target.files[0]);
+};
 
 
   const handlePet = async (e) => {
+    e.preventDefault();
     try {
-      e.preventDefault();
-      const addedPet = {
-        type,
-        petName,
-        pic,
-        height,
-        weight,
-        color,
-        petBio,
-        hypoallergenic,
-        dietaryRestrictions,
-        breed,
-      };
+      const addedPet = new FormData()
+      addedPet.append('type',petInfo.type);
+      addedPet.append('petName',petInfo.petName);
+      addedPet.append('pic',pic);
+      addedPet.append('height',petInfo.height);
+      addedPet.append('weight',petInfo.weight);
+      addedPet.append('color',petInfo.color);
+      addedPet.append('petBio',petInfo.petBio);
+      addedPet.append('hypoallergenic',petInfo.hypoallergenic);
+      addedPet.append('dietaryRestrictions',petInfo.dietaryRestrictions);
+      addedPet.append('breed',petInfo.breed)
+      
       console.log(addedPet)
       const token = localStorage.getItem('token')
       const res = await axios.post(
@@ -77,6 +57,7 @@ function AddPets() {
         addedPet,
         {headers: {authorization: `Bearer ${token}`}}
       );
+      addPet(res.data)
       console.log(res.data);
     } catch (err) {
       console.log(err);
@@ -94,7 +75,9 @@ function AddPets() {
                   placeholder="Pet Type"
                   aria-label="Pet Type"
                   aria-describedby="basic-addon1"
-                  onChange={handleType}
+                  onChange={handlePetInfo}
+                  value = {petInfo.type}
+                  id="type"
                   name="type"
                   type="text"
                 />
@@ -106,7 +89,9 @@ function AddPets() {
                   placeholder="Pet Name"
                   aria-label="Pet Name"
                   aria-describedby="basic-addon1"
-                  onChange={handlePetName}
+                  onChange={handlePetInfo}
+                  value = {petInfo.petName}
+                  id='petName'
                   name="name"
                   type="text"
                 />
@@ -119,8 +104,10 @@ function AddPets() {
                   aria-label="Pet Picture"
                   aria-describedby="basic-addon1"
                   onChange={handlePic}
+                  accept='img/*'
                   name="pic"
                   type="file"
+                  className='petPic'
                 />
               </InputGroup>
         
@@ -130,7 +117,9 @@ function AddPets() {
                   placeholder="Pet Height"
                   aria-label="Pet Height"
                   aria-describedby="basic-addon1"
-                  onChange={handleHeight}
+                  onChange={handlePetInfo}
+                  id='height'
+                  value = {petInfo.height}
                   name="height"
                   type="text"
                 />
@@ -142,7 +131,9 @@ function AddPets() {
                   placeholder="Pet Weight"
                   aria-label="Pet Weight"
                   aria-describedby="basic-addon1"
-                  onChange={handleWeight}
+                  onChange={handlePetInfo}
+                  value={petInfo.weight}
+                  id='weight'
                   name="weight"
                   type="text"
                 />
@@ -153,7 +144,9 @@ function AddPets() {
                   placeholder="Pet Color"
                   aria-label="Pet Color"
                   aria-describedby="basic-addon1"
-                  onChange={handleColor}
+                  onChange={handlePetInfo}
+                  value={petInfo.color}
+                  id='color'
                   name="color"
                   type="text"
                 />
@@ -165,7 +158,9 @@ function AddPets() {
                   placeholder="Pet Bio"
                   aria-label="Pet Bio:"
                   aria-describedby="basic-addon1"
-                  onChange={handlePetBio}
+                  onChange={handlePetInfo}
+                  value={petInfo.petBio}
+                  id='petBio'
                   name="petBio"
                   as="textarea"
                 />
@@ -174,7 +169,7 @@ function AddPets() {
         <InputGroup className="mb-3">
                 <InputGroup.Text id="basic-addon1">Check if Hypoallergenic:</InputGroup.Text>
                 <Form.Group className="mb-3" controlId="formBasicCheckbox">
-        <Form.Check type="checkbox" className='form-check-label' onClick={setHypoallergenic(true)}/>
+        <Form.Check type="checkbox" id='hypoallergenic' className='form-check-label' onClick={handlePetInfo} value={petInfo.hypoallergenic}/>
       </Form.Group>
               </InputGroup>
        
@@ -184,9 +179,11 @@ function AddPets() {
                   placeholder="Pet Dietary Restrictions"
                   aria-label="Pet Color"
                   aria-describedby="basic-addon1"
-                  onChange={handleDietaryRestrictions}
+                  onChange={handlePetInfo}
+                  value={petInfo.dietaryRestrictions}
                   name="Dietary Restrictions"
                   type="text"
+                  id='dietaryRestrictions'
                 />
               </InputGroup>
        
@@ -196,9 +193,11 @@ function AddPets() {
                   placeholder="Pet Breed"
                   aria-label="Pet Breed"
                   aria-describedby="basic-addon1"
-                  onChange={handleBreed}
+                  onChange={handlePetInfo}
+                  value={petInfo.breed}
                   name="breed"
                   type="text"
+                  id='breed'
                 />
               </InputGroup>
         <button className="profileButton"  type='submit'>

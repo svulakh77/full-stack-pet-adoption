@@ -1,12 +1,13 @@
-import React, { Component } from "react";
+import React, { useEffect,useState } from "react";
 import Accordion from "react-bootstrap/Accordion";
 import { useAccordionButton } from "react-bootstrap/AccordionButton";
 import Card from "react-bootstrap/Card";
+import axios from "axios";
+import PetCard from "./PetCard";
+
 function CustomToggle({ children, eventKey }) {
   const decoratedOnClick = useAccordionButton(
     eventKey
-    // , () =>
-    //   console.log('totally custom!'),
   );
 
   return (
@@ -19,22 +20,30 @@ function CustomToggle({ children, eventKey }) {
     </button>
   );
 }
-function ChildToggle({ eventKey, children }) {
-  const childClick = useAccordionButton(eventKey, () => {
-    console.log("kiddy click");
-    return (
-      <button
-        type="button"
-        //   className='accordionButton'
-        onClick={childClick}
-      >
-        {children}
-      </button>
-    );
-  });
-}
 
 export default function Dropdown() {
+    const[basicData,setBasicData]=useState([])
+    const [filteredBasicData,setFilteredBasicData] = useState(basicData);
+    const handleChange = e => {
+        if (e.target.checked) {
+            setBasicData([...basicData, e.target.value]);
+            return e;
+        } else {
+            setBasicData(basicData.filter(id => id !== e.target.value));
+            return e;
+        }
+    };
+    const handleBasicSearch = async(e)=>{
+        e.preventDefault();
+        try{
+        const res = await axios.get(`http://localhost:8080/pets/search/basic`)
+        setBasicData(res.data)
+        console.log(basicData)
+        }catch(err){
+          console.log(err)
+        }
+      }
+       
   return (
     <div>
       <Accordion>
@@ -46,7 +55,7 @@ export default function Dropdown() {
           <Accordion.Collapse eventKey="0">
             <Card.Body>
               <h5>Pet Type:</h5>
-              <form className="basicForm">
+              <form className="basicForm" onSubmit={handleBasicSearch}>
                 <div className="basicInput">
                   <label className="basicPet" htmlFor="dog">
                     {" "}
@@ -86,6 +95,7 @@ export default function Dropdown() {
                     value="Bird"
                   />
                 </div>
+                <button className="button-9" role="button" type="submit">Basic Search</button>
               </form>
             </Card.Body>
           </Accordion.Collapse>
@@ -273,6 +283,7 @@ export default function Dropdown() {
                         value="heavy"
                       />
                     </div>
+                    <button className="button-9" role="button">Advanced Search</button>
                   </form>
                 </div>
                 <div className="advancedBox">
@@ -284,6 +295,7 @@ export default function Dropdown() {
                   />
                 </div>
               </div>
+             
             </Card.Body>
           </Accordion.Collapse>
         </Card>

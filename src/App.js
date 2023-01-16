@@ -7,11 +7,13 @@ import Search from "./components/Search";
 import OpenModal from "./components/OpenModal";
 import NavBarOut from "./components/NavBarOut";
 import SomeContext from "./Context";
-import React, { useState,useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import Profile from "./components/Profile";
 import NavBarIn from "./components/NavBarIn";
 import MyPets from "./components/MyPets";
 import AddPets from "./components/AddPets";
+import PetPage from "./components/PetPage";
+import EditPet from "./components/EditPet";
 function App() {
   const [show, setShow] = useState(false);
   const [currentUser, setCurrentUser] = useState("");
@@ -31,28 +33,37 @@ function App() {
   const [hypoallergenic, setHypoallergenic] = useState(false);
   const [dietaryRestrictions, setDietaryRestrictions] = useState("");
   const [breed, setBreed] = useState("");
+  const [pets, setPets] = useState([]);
   const handleClose = () => setShow(false);
   const handleShow = () => {
     setShow(true);
   };
-  useEffect(()=>{
-const token = localStorage.getItem('token')
-const user = localStorage.getItem('currentUser')
-const parsedUser = JSON.parse(user)
-if (token && parsedUser ){
-  setAuthenticated(true)
-  setCurrentUser(parsedUser)
-}
-  },[])
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    const user = localStorage.getItem("currentUser");
+    const parsedUser = JSON.parse(user);
+    if (token && parsedUser) {
+      setAuthenticated(true);
+      setCurrentUser(parsedUser);
+    }
+  }, []);
+
   const onModalSubmit = (e) => {
     e.stopPropagation();
     handleClose();
   };
+  const addPet = (newPet) => {
+    const newPetArray = [...pets, newPet];
+    setPets(newPetArray);
+  };
   return (
     <SomeContext.Provider
       value={{
+        pets,
+        setPets,
         admin,
         setAdmin,
+        addPet,
         email,
         setEmail,
         password,
@@ -102,6 +113,8 @@ if (token && parsedUser ){
           <Route path="/profile" element={<Profile />}></Route>
           <Route path="/myPets" element={<MyPets />}></Route>
           <Route path="/addPet" element={<AddPets />}></Route>
+          <Route path="/petPage/:id" element={<PetPage />}></Route>
+          <Route path="/editPet" element={<EditPet />}></Route>
         </Routes>
       </div>
     </SomeContext.Provider>
