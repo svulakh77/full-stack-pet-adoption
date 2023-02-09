@@ -1,23 +1,20 @@
-import React ,{useState} from 'react'
-import SearchItem from './SearchItem';
-import Example from './Accordion';
+import React ,{useState,useEffect} from 'react'
+import DropDown from './Accordion';
 import axios from 'axios';
 
 function Search() {
-  
-const handleBasicSearch = async()=>{
-  try{
-  const res = await axios.get(`http://localhost:8080/pets/search/basic`)
-  console.log(res.data)
-  }catch(err){
-    console.log(err)
-  }
-}
+  const[basics,setBasics]=useState([])
+  useEffect(()=>{
+    axios.get(`http://localhost:8080/pets/search/basic`).then((res)=>{
+      setBasics(res.data)
+      console.log(basics)
+    })
+  },[])
+
  
    
-   return <div>
-   
-  <Example/>
+   return <div className="searchList">
+  <DropDown/>
   
    
    

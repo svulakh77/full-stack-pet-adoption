@@ -1,25 +1,23 @@
 import React, {useContext, useEffect, useState} from "react";
-import PetCard from "./PetCard";
+import { useNavigate } from "react-router-dom";
+import MyPetCard from "./MyPetCard";
 import PetPage from "./PetPage";
 import axios from 'axios';
 import SomeContext from "../Context";
 function MyPets() {
 // const[pets,setPets]=useState([]);
 const [token]=useState(localStorage.getItem('token')||'');
-const {pets,setPets}=useContext(SomeContext)
+const navigate=useNavigate()
+const {pets,setPets,currentUser,admin}=useContext(SomeContext)
 console.log(token)
 useEffect(()=>{
-  axios.get('http://localhost:8080/pets',{
-    headers:{
-      authorization:`Bearer ${JSON.stringify(token)}`,
-    }
-  }).then((res)=>{
+  axios.get('http://localhost:8080/pets',
+    {withCredentials: true}
+  ).then((res)=>{
     setPets(res.data)
-    
   })
 },[token])
 console.log(pets)
-
 
   const [likes, setLikes] = useState(100);
   const [isClicked, setIsClicked] = useState(false);
@@ -32,29 +30,19 @@ console.log(pets)
     }
     setIsClicked(!isClicked);
   };
+  const handleSavedPets=()=>{
+    navigate("/savedPets")
+  }
   return (
     <div>
-      <button className="myPetsButton">Pets</button>
-      <button className="myPetsButton">Saved Pets</button>
+      <div className="myPets">
+      <button className="button-81">Pets</button>
+      <button className="button-81" onClick={handleSavedPets}>Saved Pets</button>
+      </div>
       <div className='petList'>
-      {pets.map(pet=>(<div><PetCard
-        type = {pet.type}
-        petName={pet.petName}
-        pic={pet.pic}
-        weight = {pet.weight}
-        height = {pet.height}
-        color = {pet.color}
-        status = {pet.adoptionStatus}
-        breed = {pet.breed}
-        diet = {pet.dietaryRestrictions}
-        hypoallergenic = {pet.hypoallergenic}
-        key = {pet.id}
-        pet = {pet}
-
-        />
-        {/* <PetPage pet = {pet}/> */}
-      </div>))}
-      
+      {pets.map((pet) => (
+          <MyPetCard pet={pet} />
+        ))}
       </div>
     </div>
   );

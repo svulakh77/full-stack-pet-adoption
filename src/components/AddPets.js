@@ -1,34 +1,20 @@
 import React, { useContext, useState } from "react";
 import SomeContext from "../Context";
-import { Form, InputGroup, Modal, Nav } from 'react-bootstrap';
+import { Form, InputGroup } from 'react-bootstrap';
 import axios from "axios";
 
 function AddPets() {
   const {
-    type,
-    setType,
-    petName,
-    setPetName,
     pic,
     setPic,
-    height,
-    setHeight,
-    weight,
-    setWeight,
-    petBio,
-    setPetBio,
-    hypoallergenic,
-    setHypoallergenic,
-    dietaryRestrictions,
-    setDietaryRestrictions,
-    breed,
-    setBreed,
     addPet
   } = useContext(SomeContext);
-  // const[color,setColor]=useState("")
-  const [petInfo, setPetInfo]=useState({type:'',petName:'', height:0,weight:0,color:'',petBio:'',hypoallergenic:0,dietaryRestrictions:'',breed:''})
+  const [petInfo, setPetInfo]=useState({type:'',petName:'', height:0,weight:0,color:'',petBio:'',hypoallergenic:false,dietaryRestrictions:'',breed:''})
 const handlePetInfo = (e)=>{
   setPetInfo({...petInfo,[e.target.id]:e.target.value});
+}
+const handleHypoallergenic = () => {
+  setPetInfo({...petInfo, ["hypoallergenic"]: !petInfo.hypoallergenic});
 }
 const handlePic = (e) => {
   setPic(e.target.files[0]);
@@ -46,7 +32,13 @@ const handlePic = (e) => {
       addedPet.append('weight',petInfo.weight);
       addedPet.append('color',petInfo.color);
       addedPet.append('petBio',petInfo.petBio);
-      addedPet.append('hypoallergenic',petInfo.hypoallergenic);
+      if (Boolean(petInfo.hypoallergenic)) {
+        addedPet.append('hypoallergenic', 1);
+      }
+      else {
+        addedPet.append('hypoallergenic', 0);
+      }
+      
       addedPet.append('dietaryRestrictions',petInfo.dietaryRestrictions);
       addedPet.append('breed',petInfo.breed)
       
@@ -55,10 +47,12 @@ const handlePic = (e) => {
       const res = await axios.post(
         "http://localhost:8080/pets/newPet",
         addedPet,
-        {headers: {authorization: `Bearer ${token}`}}
+        {withCredentials: true}
       );
       addPet(res.data)
       console.log(res.data);
+      setPetInfo({type:'',petName:'', height:0,weight:0,color:'',petBio:'',hypoallergenic:false,dietaryRestrictions:'',breed:''});
+      setPic("")
     } catch (err) {
       console.log(err);
     }
@@ -169,7 +163,7 @@ const handlePic = (e) => {
         <InputGroup className="mb-3">
                 <InputGroup.Text id="basic-addon1">Check if Hypoallergenic:</InputGroup.Text>
                 <Form.Group className="mb-3" controlId="formBasicCheckbox">
-        <Form.Check type="checkbox" id='hypoallergenic' className='form-check-label' onClick={handlePetInfo} value={petInfo.hypoallergenic}/>
+        <Form.Check type="checkbox" id='hypoallergenic' className='form-check-label' onClick={handleHypoallergenic} value={petInfo.hypoallergenic}/>
       </Form.Group>
               </InputGroup>
        

@@ -14,8 +14,11 @@ import MyPets from "./components/MyPets";
 import AddPets from "./components/AddPets";
 import PetPage from "./components/PetPage";
 import EditPet from "./components/EditPet";
+import DashBoard from "./components/DashBoard";
+import SavedPets from "./components/SavedPets";
+import PrivateRoute from "./components/PrivateRoute";
 function App() {
-  const [show, setShow] = useState(false);
+  const [show, setShow] = useState(true);
   const [currentUser, setCurrentUser] = useState("");
   const [admin, setAdmin] = useState(false);
   const [authenticated, setAuthenticated] = useState(false);
@@ -24,28 +27,29 @@ function App() {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [phoneNumber, setPhoneNumber] = useState(0);
-  const [type, setType] = useState("");
-  const [petName, setPetName] = useState("");
   const [pic, setPic] = useState("");
-  const [height, setHeight] = useState(0);
-  const [weight, setWeight] = useState(0);
-  const [petBio, setPetBio] = useState("");
-  const [hypoallergenic, setHypoallergenic] = useState(false);
-  const [dietaryRestrictions, setDietaryRestrictions] = useState("");
-  const [breed, setBreed] = useState("");
   const [pets, setPets] = useState([]);
+  const[adopted,setAdopted]=useState(false);
+  const[fostered,setFostered]=useState(false);
+  const[returned,setReturned]=useState(true);
+  const[saved,setSaved]=useState("");
   const handleClose = () => setShow(false);
   const handleShow = () => {
-    setShow(true);
+    setShow(!show);
   };
   useEffect(() => {
     const token = localStorage.getItem("token");
     const user = localStorage.getItem("currentUser");
     const parsedUser = JSON.parse(user);
+
     if (token && parsedUser) {
       setAuthenticated(true);
       setCurrentUser(parsedUser);
+      if (parsedUser.isAdmin === 1) {
+        setAdmin(true);
+      }
     }
+
   }, []);
 
   const onModalSubmit = (e) => {
@@ -59,6 +63,9 @@ function App() {
   return (
     <SomeContext.Provider
       value={{
+        adopted,setAdopted,
+        fostered,setFostered,
+        returned,setReturned,
         pets,
         setPets,
         admin,
@@ -82,24 +89,10 @@ function App() {
         setAuthenticated,
         currentUser,
         setCurrentUser,
-        type,
-        setType,
-        petName,
-        setPetName,
         pic,
         setPic,
-        height,
-        setHeight,
-        weight,
-        setWeight,
-        petBio,
-        setPetBio,
-        hypoallergenic,
-        setHypoallergenic,
-        dietaryRestrictions,
-        setDietaryRestrictions,
-        breed,
-        setBreed,
+        saved,
+        setSaved
       }}
     >
       <div className="App">
@@ -112,9 +105,11 @@ function App() {
           <Route path="/openModal" element={<OpenModal />}></Route>
           <Route path="/profile" element={<Profile />}></Route>
           <Route path="/myPets" element={<MyPets />}></Route>
-          <Route path="/addPet" element={<AddPets />}></Route>
+          <Route path="/addPet" element={<PrivateRoute admin={admin}><AddPets /></PrivateRoute>}></Route>
           <Route path="/petPage/:id" element={<PetPage />}></Route>
-          <Route path="/editPet" element={<EditPet />}></Route>
+          <Route path="/editPet" element={<PrivateRoute admin={admin}><EditPet /></PrivateRoute>}></Route>
+          <Route path="/dashBoard" element={<DashBoard/>}></Route>
+          <Route path="/savedPets" element={<SavedPets/>}></Route>
         </Routes>
       </div>
     </SomeContext.Provider>

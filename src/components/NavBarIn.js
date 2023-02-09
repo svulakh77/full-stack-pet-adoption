@@ -4,7 +4,7 @@ import { Button } from "react-bootstrap";
 import SomeContext from "../Context";
 
 function NavBarIn() {
-  const {currentUser,setCurrentUser,authenticated,setAuthenticated } = useContext(SomeContext);
+  const {currentUser,setCurrentUser,authenticated,setAuthenticated,admin } = useContext(SomeContext);
   const handleLogout=()=>{
     setCurrentUser("")
     setAuthenticated(false)
@@ -21,9 +21,17 @@ function NavBarIn() {
           <Link className="link" to={"/profile"} >
             Profile
           </Link>
+         
           <Link className="link" to={"/myPets"}>My Pets</Link>
-          <Link className="link" to={"/addPet"}>Add Pets</Link>
-          <Link className="link" to={"/editPet"}>Edit Pet</Link>
+ {admin?
+          <Link className="link" to={"/addPet"}>Add Pets</Link>:""
+}
+{admin?
+          <Link className="link" to={"/editPet"}>Edit Pet</Link>:""
+        }
+        {admin?
+          <Link className="link" to={'/dashBoard'}>Dashboard</Link>:""
+        }
           <Link className="link" to={"/"} onClick={handleLogout}>Logout</Link>
         </div>
       </nav>

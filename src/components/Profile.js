@@ -12,6 +12,7 @@ function Profile() {
     lastName,
     handleClose,
     setCurrentUser,
+    currentUser,
   } = useContext(SomeContext);
   const [newEmail, setNewEmail] = useState(email);
   const [newPassword, setNewPassword] = useState(password);
@@ -42,20 +43,31 @@ function Profile() {
       console.log("Updating user");
       e.stopPropagation();
       handleClose();
-      const newProfile = {
-        email: newEmail,
-        password: newPassword,
-        firstName: newFirstName,
-        lastName: newLastName,
-        phoneNumber: newPhoneNumber,
-        bio,
-      };
+      let newProfile = {};
+      if (newEmail) {
+        newProfile["email"] = newEmail;
+      }
+      if (newPassword) {
+        newProfile["password"] = newPassword;
+      }
+      if (newFirstName) {
+        newProfile["firstName"] = newFirstName;
+      }
+      if (newLastName) {
+        newProfile["lastName"] = newLastName;
+      }
+      if (newPhoneNumber) {
+        newProfile["phoneNumber"] = newPhoneNumber;
+      }
+      if (bio) {
+        newProfile["bio"] = bio;
+      }
       console.log(newProfile);
       const token = localStorage.getItem("token");
       const res = await axios.put(
         "http://localhost:8080/users/profile",
         newProfile,
-        { headers: { authorization: `Bearer ${token}` } }
+        { withCredentials: true }
       );
       localStorage.getItem("token", res.data.token);
       console.log(res.data);
@@ -72,12 +84,13 @@ function Profile() {
           <InputGroup className="mb-3">
             <InputGroup.Text id="basic-addon1">Update Email:</InputGroup.Text>
             <Form.Control
-              placeholder="Email"
+              placeholder={currentUser.email}
               aria-label="Email"
               aria-describedby="basic-addon1"
               onChange={handleNewEmail}
               name="email"
               type="email"
+              default={currentUser.email}
             />
           </InputGroup>
 

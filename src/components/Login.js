@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import axios from "axios";
 import SomeContext from "../Context";
 import { Modal } from "react-bootstrap";
@@ -6,7 +6,7 @@ import { Form, InputGroup, ModalBody } from "react-bootstrap";
 import { Button } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 function Login() {
-  const { show, onModalSubmit,handleClose,currentUser,setCurrentUser,authenticated,setAuthenticated } = useContext(SomeContext);
+  const { show, onModalSubmit,handleClose,currentUser,setCurrentUser,authenticated,setAuthenticated, admin, setAdmin } = useContext(SomeContext);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate()
@@ -26,7 +26,7 @@ function Login() {
       console.log(loggedIn)
       const res = await axios.post(
         "http://localhost:8080/users/login",
-        loggedIn
+        loggedIn,{withCredentials: true}
       );
     
       if(res.data.token) {
@@ -34,22 +34,32 @@ function Login() {
         handleClose();
         setAuthenticated(true)
         setCurrentUser(res.data.user)
+        console.log(res.data.user)
         
         localStorage.setItem('token', res.data.token);
         localStorage.setItem('currentUser',JSON.stringify(res.data.user))
         
         navigate('/')
       }
-      
-      console.log(res.data.user.firstName);
-      console.log(res.data.token);
+      if (res.data.user.isAdmin===1){
+        setAdmin(true);
+        // admin = true;
+       
+      }
+      else {
+        setAdmin(false);
+        // admin = false
+      }
+      console.log(admin)
       console.log(currentUser);
+      console.log(res.data.token);
     } catch (error) {
       console.log(error)
-      console.log(error.response.data)
-      alert(error.response.data)
+      // console.log(error.response.data)
+      // alert(error.response.data)
     }
   };
+  
 
   return (
     <div>

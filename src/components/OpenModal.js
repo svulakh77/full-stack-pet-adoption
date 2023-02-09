@@ -1,38 +1,51 @@
 import React, { useContext } from "react";
-import Modal from "react-bootstrap/Modal";
-import { Link } from "react-router-dom";
-import ModalBody from "react-bootstrap/ModalBody";
 import SomeContext from "../Context";
-import { Button, ModalHeader } from "react-bootstrap";
+import { Modal, Text, Link, Row, Spacer } from "@nextui-org/react";
 
 function OpenModal() {
-  const { show, onModalSubmit } = useContext(SomeContext);
+  const { show, handleShow, onModalSubmit } = useContext(SomeContext);
   return (
     <div className="modal">
       <Modal
-        show={show}
-        backdrop="static"
-        keyboard={false}
-        className="modal"
-        onHide={onModalSubmit}
+        closeButton
+        blur
+        aria-labelledby="modal-title"
+        open={show}
+        onClose={handleShow}
       >
-        <ModalBody className="modalContent">
-          {" "}
-          <button
-            type="button"
-            className="close"
-            data-dismiss="modal"
-            aria-label="Close"
-            onClick={onModalSubmit}
-          ></button>
-          <Link className="modalLink" to={"/signup"}>
-            <h1> Signup </h1>
+        <Modal.Header>
+          <Text id="modal-title" size={24}>
+            Welcome to
+            <Text
+              b
+              css={{
+                textGradient: "45deg, $blue600 -20%, $pink600 50%",
+                marginInlineStart: "$xs"
+              }}
+              size={24}
+            >
+            Pet Adoption 
+            </Text>
+          </Text>
+        </Modal.Header>
+        <Modal.Body>
+          <Link auto flat block color="secondary" href="/login">
+          <Row>
+              <Spacer x="6.7" />
+            Log In
+            <Spacer x="6.7" />
+            </Row>
           </Link>
-          <Link className="modalLink" to={"/login"}>
-            Already have an account? Login here
+          <Link auto block href="/signup">
+            <Row>
+            <Spacer x="6.5" />
+            Sign Up
+            <Spacer x="6.5" />
+            </Row>
           </Link>
-        </ModalBody>
+        </Modal.Body>
       </Modal>
+
     </div>
   );
 }

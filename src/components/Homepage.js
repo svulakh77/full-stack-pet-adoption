@@ -4,16 +4,16 @@ import SomeContext from "../Context";
 
 function Homepage() {
   const { currentUser,authenticated } = useContext(SomeContext);
-  const welcomeMessage = `Welcome back ${currentUser.firstName} ${currentUser.lastName}`
+  const welcomeMessage = `Welcome ${currentUser.firstName} ${currentUser.lastName}!`
 
   return (
   
-    <div>
+    <div className="home">
       <p className='welcomeMessage'>
       {authenticated ? welcomeMessage: ""}
       </p>
         <p className='openQuote'>
-        Can you ignore those cute sad eyes? Find your furry best friend!
+        Welcome to the Furry Bestie Adoption Agency! We hope we can help you find your new best friend
         </p>
     </div>
   )

@@ -23,6 +23,7 @@ function Signup() {
     setCurrentUser,
     currentUser,
     setAuthenticated,
+    setIsAdmin
   } = useContext(SomeContext);
   const navigate = useNavigate();
 
@@ -54,9 +55,9 @@ function Signup() {
       };
       const res = await axios.post(
         "http://localhost:8080/users/signup",
-        signedUp
+        signedUp,{withCredentials: true}
       );
-      if(res.data.token) {
+      if(res.data.ok) {
         e.stopPropagation();
         handleClose();
         setAuthenticated(true)
@@ -67,12 +68,13 @@ function Signup() {
         
         navigate('/')
       }
+    
       // localStorage.setItem('currentUser',JSON.stringify(res.data.newUser))
-      navigate("/");
-      e.stopPropagation();
-      setAuthenticated(true);
+      // navigate("/");
+      // e.stopPropagation();
+      // setAuthenticated(true);
       //  setCurrentUser(res.data);
-      handleClose();
+      // handleClose();
       console.log(res.data);
       console.log(res.data.token);
       console.log(currentUser)
@@ -170,7 +172,6 @@ function Signup() {
                 />
                 </InputGroup>
               <Button
-              onClick={handleSignUp}
               className="signUpButton"
               type="submit"
             >
