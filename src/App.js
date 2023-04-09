@@ -33,9 +33,13 @@ function App() {
   const[fostered,setFostered]=useState(false);
   const[returned,setReturned]=useState(true);
   const[saved,setSaved]=useState("");
+  const [modal,setModal]=useState(false);
   const handleClose = () => setShow(false);
   const handleShow = () => {
     setShow(!show);
+  };
+  const handleModal = () => {
+    setModal(!modal);
   };
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -92,17 +96,22 @@ function App() {
         pic,
         setPic,
         saved,
-        setSaved
+        setSaved,
+        handleModal,
+        modal,
+        setModal
       }}
     >
       <div className="App">
+
+        <OpenModal />
+
         {authenticated ? <NavBarIn /> : <NavBarOut />}
         <Routes>
           <Route path="/" element={<Homepage />}></Route>
           <Route path="/login" element={<Login />}></Route>
           <Route path="/signup" element={<Signup />}></Route>
           <Route path="/search" element={<Search />}></Route>
-          <Route path="/openModal" element={<OpenModal />}></Route>
           <Route path="/profile" element={<Profile />}></Route>
           <Route path="/myPets" element={<MyPets />}></Route>
           <Route path="/addPet" element={<PrivateRoute admin={admin}><AddPets /></PrivateRoute>}></Route>

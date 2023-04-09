@@ -47,8 +47,14 @@ function Profile() {
       if (newEmail) {
         newProfile["email"] = newEmail;
       }
+      else {
+        newProfile["email"]=email;
+      }
       if (newPassword) {
         newProfile["password"] = newPassword;
+      }
+      else{
+        newProfile["password"]=password;
       }
       if (newFirstName) {
         newProfile["firstName"] = newFirstName;
@@ -72,6 +78,7 @@ function Profile() {
       localStorage.getItem("token", res.data.token);
       console.log(res.data);
       setCurrentUser(newProfile);
+      
     } catch (error) {
       console.log(error);
     }
@@ -113,7 +120,7 @@ function Profile() {
               Update First Name:
             </InputGroup.Text>
             <Form.Control
-              placeholder="First Name"
+              placeholder={currentUser.firstName}
               aria-label="First Name"
               aria-describedby="basic-addon1"
               onChange={handleNewFirstName}
@@ -127,7 +134,7 @@ function Profile() {
               Update Last Name:
             </InputGroup.Text>
             <Form.Control
-              placeholder="Last Name"
+              placeholder={currentUser.lastName}
               aria-label="Last Name"
               aria-describedby="basic-addon1"
               onChange={handleNewLastName}
@@ -141,7 +148,7 @@ function Profile() {
               Update Phone Number:
             </InputGroup.Text>
             <Form.Control
-              placeholder="Phone Number"
+              placeholder={currentUser.phoneNumber}
               aria-label="Phone Number"
               aria-describedby="basic-addon1"
               onChange={handleNewPhoneNumber}
@@ -153,7 +160,7 @@ function Profile() {
           <InputGroup className="mb-3">
             <InputGroup.Text id="basic-addon1">Add a Bio:</InputGroup.Text>
             <Form.Control
-              placeholder="Bio"
+              placeholder={currentUser.bio}
               aria-label="Bio"
               aria-describedby="basic-addon1"
               onChange={handleBio}

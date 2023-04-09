@@ -3,15 +3,15 @@ import SomeContext from "../Context";
 import { Modal, Text, Link, Row, Spacer } from "@nextui-org/react";
 
 function OpenModal() {
-  const { show, handleShow, onModalSubmit } = useContext(SomeContext);
+  const { onModalSubmit, modal, handleModal } = useContext(SomeContext);
   return (
     <div className="modal">
       <Modal
         closeButton
         blur
         aria-labelledby="modal-title"
-        open={show}
-        onClose={handleShow}
+        open={modal}
+        onClose={handleModal}
       >
         <Modal.Header>
           <Text id="modal-title" size={24}>

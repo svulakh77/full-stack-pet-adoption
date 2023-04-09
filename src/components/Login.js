@@ -5,8 +5,10 @@ import { Modal } from "react-bootstrap";
 import { Form, InputGroup, ModalBody } from "react-bootstrap";
 import { Button } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
+import Swal from 'sweetalert2';
+
 function Login() {
-  const { show, onModalSubmit,handleClose,currentUser,setCurrentUser,authenticated,setAuthenticated, admin, setAdmin } = useContext(SomeContext);
+  const { show, onModalSubmit,handleClose,currentUser, setCurrentUser, authenticated,setAuthenticated, admin, setAdmin } = useContext(SomeContext);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate()
@@ -55,8 +57,13 @@ function Login() {
       console.log(res.data.token);
     } catch (error) {
       console.log(error)
-      // console.log(error.response.data)
-      // alert(error.response.data)
+      console.log(error.response.data)
+      Swal.fire({
+        icon: 'error',
+        text: error.response.data,
+        
+        
+      })
     }
   };
   

@@ -1,10 +1,11 @@
 import React, { useState, useContext } from "react";
 import axios from "axios";
 import Modal from "react-bootstrap/Modal";
-import { ModalBody,Form, InputGroup } from "react-bootstrap";
+import { ModalBody, Form, InputGroup } from "react-bootstrap";
 import SomeContext from "../Context";
 import { Button } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
+import Swal from "sweetalert2";
 function Signup() {
   const {
     show,
@@ -23,7 +24,7 @@ function Signup() {
     setCurrentUser,
     currentUser,
     setAuthenticated,
-    setIsAdmin
+    setIsAdmin,
   } = useContext(SomeContext);
   const navigate = useNavigate();
 
@@ -55,35 +56,32 @@ function Signup() {
       };
       const res = await axios.post(
         "http://localhost:8080/users/signup",
-        signedUp,{withCredentials: true}
+        signedUp,
+        { withCredentials: true }
+        
       );
-      if(res.data.ok) {
+      if (res.data.ok) {
         e.stopPropagation();
         handleClose();
-        setAuthenticated(true)
-        setCurrentUser(res.data.newUser)
+        // setAuthenticated(true);
+        // setCurrentUser(res.data.newUser);
+
+        // localStorage.setItem("token", res.data.token);
+        // localStorage.setItem("currentUser", JSON.stringify(res.data.newUser));
         
-        localStorage.setItem('token', res.data.token);
-        localStorage.setItem('currentUser',JSON.stringify(res.data.newUser))
-        
-        navigate('/')
+        navigate("/login")
+
       }
-    
-      // localStorage.setItem('currentUser',JSON.stringify(res.data.newUser))
-      // navigate("/");
-      // e.stopPropagation();
-      // setAuthenticated(true);
-      //  setCurrentUser(res.data);
-      // handleClose();
-      console.log(res.data);
-      console.log(res.data.token);
-      console.log(currentUser)
-      
+      console.log(res)
+
     } catch (error) {
       setAuthenticated(false);
       console.log(error);
       console.log(error.response.data);
-      alert(error.response.data);
+      Swal.fire({
+        icon: "error",
+        text: error.response.data,
+      });
     }
   };
   return (
@@ -128,7 +126,9 @@ function Signup() {
                 />
               </InputGroup>
               <InputGroup className="mb-3">
-                <InputGroup.Text id="basic-addon1">Confirm Password:</InputGroup.Text>
+                <InputGroup.Text id="basic-addon1">
+                  Confirm Password:
+                </InputGroup.Text>
                 <Form.Control
                   placeholder="Confirm Password"
                   aria-label="Password"
@@ -161,7 +161,9 @@ function Signup() {
                 />
               </InputGroup>
               <InputGroup className="mb-3">
-                <InputGroup.Text id="basic-addon1">Phone Number:</InputGroup.Text>
+                <InputGroup.Text id="basic-addon1">
+                  Phone Number:
+                </InputGroup.Text>
                 <Form.Control
                   placeholder="Phone Number"
                   aria-label="phoneNumber"
@@ -170,15 +172,11 @@ function Signup() {
                   name="phoneNumber"
                   type="tel"
                 />
-                </InputGroup>
-              <Button
-              className="signUpButton"
-              type="submit"
-            >
-              Sign Up
-            </Button>
+              </InputGroup>
+              <Button className="signUpButton" type="submit">
+                Sign Up
+              </Button>
             </form>
-
           </ModalBody>
         </Modal>
       </form>

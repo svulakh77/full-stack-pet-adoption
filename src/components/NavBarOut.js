@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import SomeContext from "../Context";
 
 function NavBarOut() {
-  const { show, handleClose, handleShow, onModalSubmit } =
+  const { show, handleClose, handleModal, onModalSubmit } =
     useContext(SomeContext);
   return (
     <nav>
@@ -14,7 +14,7 @@ function NavBarOut() {
         <Link className="link" to={"/search"}>
           Search
         </Link>
-        <Link className="link" to={"/openModal"} onClick={handleShow}>
+        <Link className="link" onClick={handleModal}>
           Login or Sign Up
         </Link>
       </div>

@@ -24,7 +24,7 @@ export default function Dropdown() {
   //   console.log(basic);
   const [petType, setPetType] = useState({});
   const [petsData, setPetsData] = useState({});
-  const{pets,setPets}=useContext(SomeContext)
+  const{pets, setPets} = useContext(SomeContext)
 
   const handleChange = (e) => {
     setPets({ ...pets, [e.target.name]: e.target.value });
